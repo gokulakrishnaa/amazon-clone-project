@@ -1,6 +1,7 @@
 export const initialState = {
   basket: [],
   user: null,
+  email: null,
 };
 
 export const getBasketTotal = (basket) =>
@@ -40,6 +41,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         user: action.user,
+      };
+    case "SET_EMAIL":
+      return {
+        ...state,
+        email: action.email,
       };
     default:
       return state;

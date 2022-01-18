@@ -1,34 +1,57 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
-import { auth } from "./firebase.js";
+import { useStateValue } from "./StateProvider";
 
 export function Login() {
+  const [{}, dispatch] = useStateValue();
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = (e) => {
-    e.preventDefault();
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((auth) => {
-        history.push("/");
-      })
-      .catch((error) => alert(error.message));
+  const register = () => {
+    const newUser = {
+      email,
+      password,
+    };
+
+    fetch("https://node-money-manager.herokuapp.com/api/amazon/signup", {
+      method: "POST",
+      body: JSON.stringify(newUser),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => history.push("/registered"));
   };
 
-  const register = (e) => {
-    e.preventDefault();
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((auth) => {
-        console.log(auth);
-        if (auth) {
-          history.push("/");
-        }
+  const signIn = () => {
+    const credentials = {
+      email,
+      password,
+    };
+
+    fetch("https://node-money-manager.herokuapp.com/api/amazon/login", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
       })
-      .catch((error) => alert(error.message));
+      .then((data) => {
+        console.log(data);
+        if (data.message === "Login Successful") {
+          dispatch({
+            type: "SET_EMAIL",
+            email: data.email,
+          });
+          history.push("/");
+        } else {
+          history.push("/login");
+        }
+      });
   };
 
   return (
@@ -57,7 +80,7 @@ export function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
-            type="submit"
+            type="button"
             onClick={signIn}
             className="login__signInButton"
           >

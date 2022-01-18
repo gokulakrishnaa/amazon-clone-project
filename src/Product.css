@@ -25,6 +25,7 @@
   border-color: rgb(58, 80, 14);
   margin-top: 10px;
   color: black;
+  cursor: pointer;
 }
 
 .product__info {

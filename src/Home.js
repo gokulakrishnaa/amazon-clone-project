@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.css";
 import Product from "./Product";
+import { useStateValue } from "./StateProvider";
 
 function Home() {
+  const [{ email }, dispatch] = useStateValue();
+
+  useEffect(() => {
+    const userFunction = () => {
+      fetch(
+        "https://node-money-manager.herokuapp.com/api/amazon/loginstatus/" +
+          email
+      )
+        .then((data) => data.json())
+        .then((user) => {
+          console.log("User is", user);
+
+          if (user.current_status === "success") {
+            dispatch({
+              type: "SET_USER",
+              user: user,
+            });
+          } else {
+            dispatch({
+              type: "SET_USER",
+              user: null,
+            });
+          }
+        });
+    };
+    userFunction();
+  }, []);
+
   return (
     <div className="home">
       <div className="home__container">
