@@ -45,6 +45,7 @@ export function Payment() {
       })
       .then(({ paymentIntent }) => {
         const data = {
+          email: user.email,
           payId: paymentIntent.id,
           basket: basket,
           amount: paymentIntent.amount,
@@ -52,6 +53,11 @@ export function Payment() {
         };
 
         console.log(data);
+
+        dispatch({
+          type: "SET_DATA",
+          paydata: data,
+        });
 
         fetch("https://node-money-manager.herokuapp.com/api/amazon/paydata", {
           method: "POST",

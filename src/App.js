@@ -27,6 +27,7 @@ function App() {
             <Registered />
           </Route>
           <Route path="/orders">
+            <Header />
             <Orders />
           </Route>
           <Route path="/checkout">

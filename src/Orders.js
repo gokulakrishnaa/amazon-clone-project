@@ -1,25 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Orders.css";
-import { useHistory } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
+import { Order } from "./Order";
 
 export function Orders() {
-  const history = useHistory();
+  const [{ basket, user, paydata }, dispatch] = useStateValue();
+  const [orders, setOrders] = useState(paydata);
 
   return (
-    <div className="login">
-      <img
-        className="login__logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png"
-        alt="amazonlogo"
-      />
-      <div className="login__container">
-        <h2 className="registered">Thank you....Ordered Successfully</h2>
-        <button
-          className="login__signInButton"
-          onClick={() => history.push("/")}
-        >
-          Continue Shopping
-        </button>
+    <div className="orders">
+      <h2>Your Orders</h2>
+      <div className="orders__order">
+        <Order order={orders} />
       </div>
     </div>
   );
